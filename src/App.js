@@ -1,39 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 
-let playlistDefaultStyle = {
-    display: 'inline-block',
-    boxSizing: 'border-box',
-    outline: "1px solid silver",
-    padding: "20px"
-};
-
 let fakeServerData = {
     user: {
-        name: "Mitya",
+        name: "User",
         playlists: [
             {
-                name: 'Starred',
-                songs: [
-                    {name: 'Always', duration: 2340},
-                    {name: 'Dark Necessities', duration: 3030},
-                    {name: 'The Mechanism', duration: 2380},
-                    {name: 'Always', duration: 1930},
-                    {name: 'New Lands', duration: 2710}
-                ]
-            },
-            {
-                name: 'Morcheeba',
-                songs: [
-                    {name: 'Charango', duration: 2340},
-                    {name: 'Blood Like Lemonade', duration: 3030},
-                    {name: 'The Great London Traffic Warden Massacre', duration: 2380},
-                    {name: 'Rome wasn\'t built in a day', duration: 1930},
-                    {name: 'Even though', duration: 2710}
-                ]
-            },
-            {
                 name: 'The Beatles',
+
+                image: require ('./beatles.jpg'),
                 songs: [
                     {name: 'Hey Jude', duration: 2340},
                     {name: 'I Wanna Hold Your Hand', duration: 3030},
@@ -43,7 +18,19 @@ let fakeServerData = {
                 ]
             },
             {
-                name: 'Prodigy',
+                name: 'Morcheeba',
+                image: require ('./morcheeba.jpg'),
+                songs: [
+                    {name: 'Charango', duration: 2340},
+                    {name: 'Blood Like Lemonade', duration: 3030},
+                    {name: 'The Great London Traffic Warden Massacre', duration: 2380},
+                    {name: 'Rome wasn\'t built in a day', duration: 1930},
+                    {name: 'Even though', duration: 2710}
+                ]
+            },
+            {
+                name: 'The Prodigy',
+                image: require ('./prodigy.jpg'),
                 songs: [
                     {name: 'Smack My Bitch Up', duration: 2340},
                     {name: 'Firestarter', duration: 3030},
@@ -51,7 +38,18 @@ let fakeServerData = {
                     {name: 'Wolrd\'s On Fire', duration: 1930},
                     {name: 'No Army Man', duration: 2710}
                 ]
-            }
+            },
+            {
+                name: 'M.A.V.S.',
+                image: require ('./mavs.jpg'),
+                songs: [
+                    {name: 'Implant', duration: 2340},
+                    {name: 'Brigador Theme', duration: 3030},
+                    {name: 'A Glowing Light, a Promice', duration: 2380},
+                    {name: 'Wavehymnal', duration: 1930},
+                    {name: 'Richter', duration: 2710}
+                ]
+            },
         ]
     }
 };
@@ -59,15 +57,15 @@ let fakeServerData = {
 class PlaylistCounter extends Component {
     render() {
         let playlistAmountLabel = null;
-        if (this.props.playlists.length != 1) {
+        if (this.props.playlists.length !== 1) {
             playlistAmountLabel = 'playlists';
         } else {
             playlistAmountLabel = 'playlist';
         }
 
         return (
-            <div style={{width:'40%', display: 'inline-block'}}>
-                <h2 style={{color:'#555'}}>{this.props.playlists && this.props.playlists.length} {playlistAmountLabel}</h2>
+            <div style={{marginRight: '30px', display: 'inline-block'}}>
+                <h2>{this.props.playlists && this.props.playlists.length} {playlistAmountLabel}</h2>
             </div>
         );
     }
@@ -86,15 +84,15 @@ class HoursCounter extends Component {
         }, 0);
 
         let durationLabel = null;
-        if (totalDuration != 1) {
+        if (totalDuration !== 1) {
             durationLabel = 'minutes';
         } else {
             durationLabel = 'minute';
         };
 
         return (
-            <div style={{width:'40%', display: 'inline-block'}}>
-                <h2 style={{color:'#555'}}>
+            <div style={{display: 'inline-block'}}>
+                <h2>
                     {totalDuration} {durationLabel}
                 </h2>
             </div>
@@ -105,8 +103,9 @@ class HoursCounter extends Component {
 class Filter extends Component {
     render() {
         return (
-            <div style={{marginBottom:"20px"}}>
-                <input type="search" />
+            <div style={{marginBottom:"40px"}}>
+                <label for="filter-field">Filter: </label>
+                <input className="filter-field" id="filter-field" type="search" />
             </div>
         );
     }
@@ -114,14 +113,16 @@ class Filter extends Component {
 
 class Playlist extends Component {
     render() {
+        let playlist = this.props.playlist;
         return (
-            <div style={{...playlistDefaultStyle, width: "25%"}}>
-                <h3>PlaylistName</h3>
-                <ul>
-                    <li>Song 1</li>
-                    <li>Song 2</li>
-                    <li>Song 3</li>
-                </ul>
+            <div className="playlist-item">
+                <h3>{playlist.name}</h3>
+                <img src={playlist.image} alt={playlist.name} />
+                <ol>
+                    {playlist.songs.map(song =>
+                        <li>{song.name}</li>
+                    )}
+                </ol>
             </div>
         );
     }
@@ -151,10 +152,12 @@ class App extends Component {
                             <HoursCounter playlists={
                                 this.state.serverData.user.playlists} />
                             <Filter/>
-                            <Playlist/>
-                            <Playlist/>
-                            <Playlist/>
-                            <Playlist/>
+                            <div className="playlists">
+                                {
+                                    this.state.serverData.user.playlists.map(playlist =>
+                                    <Playlist playlist={playlist}/>
+                                )}
+                            </div>
                         </div>
                     :
                     <h1>Loading...</h1>
