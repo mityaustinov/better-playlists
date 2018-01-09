@@ -1,5 +1,7 @@
 body {
+    background: #333;
     margin: 0;
     padding: 20px;
     font: normal normal 100% 'Helvetica', 'Arial', sans-serif;
+    color: #fff;
 }

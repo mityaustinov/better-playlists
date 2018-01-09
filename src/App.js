@@ -3,7 +3,7 @@ import './App.css';
 
 let fakeServerData = {
     user: {
-        name: "User",
+        name: "Mitya",
         playlists: [
             {
                 name: 'The Beatles',
@@ -144,7 +144,7 @@ class App extends Component {
                     ?
                         <div>
                             <h1>
-                                {this.state.serverData.user.name}&rsquo;s playlist
+                                {this.state.serverData.user.name}&rsquo;s playlists
                             </h1>
                             <PlaylistCounter playlists={
                                 this.state.serverData.user.playlists}/>
