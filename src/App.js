@@ -64,7 +64,7 @@ class PlaylistCounter extends Component {
         }
 
         return (
-            <div style={{marginRight: '30px', display: 'inline-block'}}>
+            <div style={{display: 'inline-block'}}>
                 <h2>{this.props.playlists && this.props.playlists.length} {playlistAmountLabel}</h2>
             </div>
         );
@@ -103,9 +103,8 @@ class HoursCounter extends Component {
 class Filter extends Component {
     render() {
         return (
-            <div style={{marginBottom:"40px"}}>
-                <label for="filter-field">Filter: </label>
-                <input className="filter-field" id="filter-field" type="search" />
+            <div className="filter">
+                <input name="filter" placeholder="Filter" type="search" />
             </div>
         );
     }
