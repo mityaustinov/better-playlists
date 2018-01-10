@@ -104,7 +104,8 @@ class Filter extends Component {
     render() {
         return (
             <div className="filter">
-                <input name="filter" placeholder="Filter" type="search" />
+                <input type="search" placeholder="Filter" onKeyUp={event =>
+                    this.props.onTextChange(event.target.value)} />
             </div>
         );
     }
@@ -130,35 +131,43 @@ class Playlist extends Component {
 class App extends Component {
     constructor () {
         super();
-        this.state = {serverData: {}}
+        this.state = {
+            serverData: {},
+            filterString: ''
+        }
     }
     componentDidMount () {
         setTimeout (() => {
             this.setState({serverData: fakeServerData});
-        }, 1000);
+        }, 500);
+        //setTimeout (() => {
+        //    this.setState({filterString: ''});
+        //}, 3000);
     }
     render() {
         return (
             <div className="App">
-                {this.state.serverData.user
-                    ?
-                        <div>
-                            <h1>
-                                {this.state.serverData.user.name}&rsquo;s playlists
-                            </h1>
-                            <PlaylistCounter playlists={
-                                this.state.serverData.user.playlists}/>
-                            <HoursCounter playlists={
-                                this.state.serverData.user.playlists} />
-                            <Filter/>
-                            <div className="playlists">
-                                {
-                                    this.state.serverData.user.playlists.map(playlist =>
+                {this.state.serverData.user ?
+                    <div>
+                        <h1>
+                            {this.state.serverData.user.name}&rsquo;s playlists
+                        </h1>
+                        <PlaylistCounter playlists={
+                            this.state.serverData.user.playlists}/>
+                        <HoursCounter playlists={
+                            this.state.serverData.user.playlists} />
+                        <Filter onTextChange={text => this.setState({filterString: text})} />
+                        <div className="playlists">
+                            {
+                                this.state.serverData.user.playlists.filter(playlist =>
+                                    playlist.name.toLowerCase().includes(this.state.filterString.toLowerCase())
+                                ).map(playlist =>
                                     <Playlist playlist={playlist}/>
-                                )}
-                            </div>
+                                )
+                            }
                         </div>
-                    :
+                    </div>
+                :
                     <h1>Loading...</h1>
                 }
             </div>

@@ -5,17 +5,20 @@
 h1 {
     font-size: 50px;
     margin: 0 0 20px;
+    text-shadow: 2px 2px 0 #000;
 }
 
 h2 {
     font-size: 40px;
     margin: 0 30px 40px 0;
+    text-shadow: 1px 1px 0 #000;
 }
 
 h3 {
     font-sixe: 30px;
     margin: 0 0 0;
     text-align: center;
+    text-shadow: 1px 1px 0 #000;
 }
 
 ol {
