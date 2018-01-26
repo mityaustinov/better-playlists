@@ -7,47 +7,46 @@ let fakeServerData = {
         playlists: [
             {
                 name: 'The Beatles',
-
                 image: require ('./beatles.jpg'),
                 songs: [
-                    {name: 'Hey Jude', duration: 2340},
-                    {name: 'I Wanna Hold Your Hand', duration: 3030},
-                    {name: 'Paperback Writer', duration: 2380},
-                    {name: 'Ob-la-di Ob-la-da', duration: 1930},
-                    {name: 'Penny Lane', duration: 2710}
+                    {name: 'Hey Jude', duration: 234},
+                    {name: 'I Wanna Hold Your Hand', duration: 303},
+                    {name: 'Paperback Writer', duration: 238},
+                    {name: 'Ob-la-di Ob-la-da', duration: 193},
+                    {name: 'Penny Lane', duration: 271}
                 ]
             },
             {
                 name: 'Morcheeba',
                 image: require ('./morcheeba.jpg'),
                 songs: [
-                    {name: 'Charango', duration: 2340},
-                    {name: 'Blood Like Lemonade', duration: 3030},
-                    {name: 'The Great London Traffic Warden Massacre', duration: 2380},
-                    {name: 'Rome wasn\'t built in a day', duration: 1930},
-                    {name: 'Even though', duration: 2710}
+                    {name: 'Charango', duration: 234},
+                    {name: 'Blood Like Lemonade', duration: 303},
+                    {name: 'The Great London Traffic Warden Massacre', duration: 238},
+                    {name: 'Rome wasn\'t built in a day', duration: 193},
+                    {name: 'Even though', duration: 271}
                 ]
             },
             {
                 name: 'The Prodigy',
                 image: require ('./prodigy.jpg'),
                 songs: [
-                    {name: 'Smack My Bitch Up', duration: 2340},
-                    {name: 'Firestarter', duration: 3030},
-                    {name: 'Breathe', duration: 2380},
-                    {name: 'Wolrd\'s On Fire', duration: 1930},
-                    {name: 'No Army Man', duration: 2710}
+                    {name: 'Smack My Bitch Up', duration: 234},
+                    {name: 'Firestarter', duration: 303},
+                    {name: 'Breathe', duration: 238},
+                    {name: 'Wolrd\'s On Fire', duration: 193},
+                    {name: 'No Army Man', duration: 271}
                 ]
             },
             {
                 name: 'M.A.V.S.',
                 image: require ('./mavs.jpg'),
                 songs: [
-                    {name: 'Implant', duration: 2340},
-                    {name: 'Brigador Theme', duration: 3030},
-                    {name: 'A Glowing Light, a Promice', duration: 2380},
-                    {name: 'Wavehymnal', duration: 1930},
-                    {name: 'Richter', duration: 2710}
+                    {name: 'Implant', duration: 234},
+                    {name: 'Brigador Theme', duration: 303},
+                    {name: 'A Glowing Light, a Promice', duration: 238},
+                    {name: 'Wavehymnal', duration: 193},
+                    {name: 'Richter', duration: 271}
                 ]
             },
         ]
@@ -78,23 +77,12 @@ class HoursCounter extends Component {
         }, []);
 
         let totalDuration = allSongs.reduce((sum, eachSong) => {
-            let calculation = Math.round((sum + eachSong.duration)/60);
-            //return Math.round(calculation);
-            return calculation;
-        }, 0);
-
-        let durationLabel = null;
-        if (totalDuration !== 1) {
-            durationLabel = 'minutes';
-        } else {
-            durationLabel = 'minute';
-        };
+           return sum + eachSong.duration
+        }, 0)
 
         return (
-            <div style={{display: 'inline-block'}}>
-                <h2>
-                    {totalDuration} {durationLabel}
-                </h2>
+            <div style={{width: "40%", display: 'inline-block'}}>
+                <h2>{(totalDuration/3600).toFixed(1)} hours</h2>
             </div>
         );
     }
@@ -145,6 +133,11 @@ class App extends Component {
         //}, 3000);
     }
     render() {
+        let playlistsToRender = this.state.serverData.user ? this.state.serverData.user.playlists.filter(playlist =>
+            playlist.name.toLowerCase().includes(
+                this.state.filterString.toLowerCase()
+            )
+        ) : []
         return (
             <div className="App">
                 {this.state.serverData.user ?
@@ -152,16 +145,12 @@ class App extends Component {
                         <h1>
                             {this.state.serverData.user.name}&rsquo;s playlists
                         </h1>
-                        <PlaylistCounter playlists={
-                            this.state.serverData.user.playlists}/>
-                        <HoursCounter playlists={
-                            this.state.serverData.user.playlists} />
+                        <PlaylistCounter playlists={playlistsToRender}/>
+                        <HoursCounter playlists={playlistsToRender} />
                         <Filter onTextChange={text => this.setState({filterString: text})} />
                         <div className="playlists">
                             {
-                                this.state.serverData.user.playlists.filter(playlist =>
-                                    playlist.name.toLowerCase().includes(this.state.filterString.toLowerCase())
-                                ).map(playlist =>
+                                playlistsToRender.map(playlist =>
                                     <Playlist playlist={playlist}/>
                                 )
                             }
