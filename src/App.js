@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import queryString from 'query-string';
 
 let fakeServerData = {
     user: {
@@ -15,8 +16,8 @@ let fakeServerData = {
                     {name: 'Ob-la-di Ob-la-da', duration: 193},
                     {name: 'Penny Lane', duration: 271}
                 ]
-            },
-            {
+            }
+            /*{
                 name: 'Morcheeba',
                 image: require ('./morcheeba.jpg'),
                 songs: [
@@ -48,7 +49,7 @@ let fakeServerData = {
                     {name: 'Wavehymnal', duration: 193},
                     {name: 'Richter', duration: 271}
                 ]
-            },
+            },*/
         ]
     }
 };
@@ -115,7 +116,6 @@ class Playlist extends Component {
         );
     }
 }
-
 class App extends Component {
     constructor () {
         super();
@@ -125,25 +125,40 @@ class App extends Component {
         }
     }
     componentDidMount () {
-        setTimeout (() => {
-            this.setState({serverData: fakeServerData});
-        }, 500);
         //setTimeout (() => {
-        //    this.setState({filterString: ''});
-        //}, 3000);
+        //    this.setState({serverData: fakeServerData});
+        //}, 500);
+
+        let parsed = queryString.parse(window.location.search);
+        let accessToken = parsed.access_token;
+
+        //fetch('https://api.spotify.com/v1/me', {
+        //    headers: {'Authorization' : 'Bearer ' + accessToken}
+        //}).then(response => response.json())
+        //.then(data => this.setState({serverData: {user: {name: data.display_name}}}))
+
+        fetch('https://api.spotify.com/v1/me/playlists', {
+            headers: {'Authorization' : 'Bearer ' + accessToken}
+        }).then(response => response.json())
+        .then(data => this.setState({
+            playlists: data.items.map(item => ({
+                name: item.name,
+                songs: []
+            }))
+        }))
     }
     render() {
-        let playlistsToRender = this.state.serverData.user ? this.state.serverData.user.playlists.filter(playlist =>
+        let playlistsToRender = this.state.user && this.state.user.playlists ? this.state.user.playlists.filter(playlist =>
             playlist.name.toLowerCase().includes(
                 this.state.filterString.toLowerCase()
             )
         ) : []
         return (
             <div className="App">
-                {this.state.serverData.user ?
+                {this.state.user ?
                     <div>
                         <h1>
-                            {this.state.serverData.user.name}&rsquo;s playlists
+                            {this.state.user.name}&rsquo;s playlists
                         </h1>
                         <PlaylistCounter playlists={playlistsToRender}/>
                         <HoursCounter playlists={playlistsToRender} />
@@ -157,7 +172,11 @@ class App extends Component {
                         </div>
                     </div>
                 :
-                    <h1>Loading...</h1>
+                    <button
+                        onClick={() => window.location = 'http://localhost:8888/login'}
+                        style={{display: 'block', padding: '20px', fontSize: '32px', fontWeight: 'bold', background: '#fff', letterSpacing: '-1px', color: '#111', border: '2px solid', margin: '0 auto'}}>
+                        Sign in with Spotify
+                    </button>
                 }
             </div>
         );
