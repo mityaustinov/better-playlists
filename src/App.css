@@ -46,6 +46,17 @@ input {
     border: 1px solid #333;
 }
 
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 20px;
+    font-size: 30px;
+    background: #84bd00;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+}
+
 .filter {
     margin-bottom: 30px;
 }

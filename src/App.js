@@ -1,58 +1,58 @@
 import React, { Component } from 'react';
 import './App.css';
-import queryString from 'query-string';
+import queryString from 'query-string'
 
-let fakeServerData = {
-    user: {
-        name: "Mitya",
-        playlists: [
-            {
-                name: 'The Beatles',
-                image: require ('./beatles.jpg'),
-                songs: [
-                    {name: 'Hey Jude', duration: 234},
-                    {name: 'I Wanna Hold Your Hand', duration: 303},
-                    {name: 'Paperback Writer', duration: 238},
-                    {name: 'Ob-la-di Ob-la-da', duration: 193},
-                    {name: 'Penny Lane', duration: 271}
-                ]
-            }
-            /*{
-                name: 'Morcheeba',
-                image: require ('./morcheeba.jpg'),
-                songs: [
-                    {name: 'Charango', duration: 234},
-                    {name: 'Blood Like Lemonade', duration: 303},
-                    {name: 'The Great London Traffic Warden Massacre', duration: 238},
-                    {name: 'Rome wasn\'t built in a day', duration: 193},
-                    {name: 'Even though', duration: 271}
-                ]
-            },
-            {
-                name: 'The Prodigy',
-                image: require ('./prodigy.jpg'),
-                songs: [
-                    {name: 'Smack My Bitch Up', duration: 234},
-                    {name: 'Firestarter', duration: 303},
-                    {name: 'Breathe', duration: 238},
-                    {name: 'Wolrd\'s On Fire', duration: 193},
-                    {name: 'No Army Man', duration: 271}
-                ]
-            },
-            {
-                name: 'M.A.V.S.',
-                image: require ('./mavs.jpg'),
-                songs: [
-                    {name: 'Implant', duration: 234},
-                    {name: 'Brigador Theme', duration: 303},
-                    {name: 'A Glowing Light, a Promice', duration: 238},
-                    {name: 'Wavehymnal', duration: 193},
-                    {name: 'Richter', duration: 271}
-                ]
-            },*/
-        ]
-    }
-};
+// let fakeServerData = {
+//     user: {
+//         name: "Mitya",
+//         playlists: [
+//             {
+//                 name: 'The Beatles',
+//                 image: require ('./beatles.jpg'),
+//                 songs: [
+//                     {name: 'Hey Jude', duration: 234},
+//                     {name: 'I Wanna Hold Your Hand', duration: 303},
+//                     {name: 'Paperback Writer', duration: 238},
+//                     {name: 'Ob-la-di Ob-la-da', duration: 193},
+//                     {name: 'Penny Lane', duration: 271}
+//                 ]
+//             },
+//             {
+//                 name: 'Morcheeba',
+//                 image: require ('./morcheeba.jpg'),
+//                 songs: [
+//                     {name: 'Charango', duration: 234},
+//                     {name: 'Blood Like Lemonade', duration: 303},
+//                     {name: 'The Great London Traffic Warden Massacre', duration: 238},
+//                     {name: 'Rome wasn\'t built in a day', duration: 193},
+//                     {name: 'Even though', duration: 271}
+//                 ]
+//             },
+//             {
+//                 name: 'The Prodigy',
+//                 image: require ('./prodigy.jpg'),
+//                 songs: [
+//                     {name: 'Smack My Bitch Up', duration: 234},
+//                     {name: 'Firestarter', duration: 303},
+//                     {name: 'Breathe', duration: 238},
+//                     {name: 'Wolrd\'s On Fire', duration: 193},
+//                     {name: 'No Army Man', duration: 271}
+//                 ]
+//             },
+//             {
+//                 name: 'M.A.V.S.',
+//                 image: require ('./mavs.jpg'),
+//                 songs: [
+//                     {name: 'Implant', duration: 234},
+//                     {name: 'Brigador Theme', duration: 303},
+//                     {name: 'A Glowing Light, a Promice', duration: 238},
+//                     {name: 'Wavehymnal', duration: 193},
+//                     {name: 'Richter', duration: 271}
+//                 ]
+//             },
+//         ]
+//     }
+// };
 
 class PlaylistCounter extends Component {
     render() {
@@ -105,8 +105,8 @@ class Playlist extends Component {
         let playlist = this.props.playlist;
         return (
             <div className="playlist-item">
+                <img src={playlist.imageUrl} alt={playlist.name} />
                 <h3>{playlist.name}</h3>
-                <img src={playlist.image} alt={playlist.name} />
                 <ol>
                     {playlist.songs.map(song =>
                         <li>{song.name}</li>
@@ -116,6 +116,7 @@ class Playlist extends Component {
         );
     }
 }
+
 class App extends Component {
     constructor () {
         super();
@@ -125,34 +126,71 @@ class App extends Component {
         }
     }
     componentDidMount () {
+        // setTimeout (() => {
+        //     this.setState({serverData: fakeServerData});
+        // }, 500);
         //setTimeout (() => {
-        //    this.setState({serverData: fakeServerData});
-        //}, 500);
-
-        let parsed = queryString.parse(window.location.search);
+        //    this.setState({filterString: ''});
+        //}, 3000);
+        let parsed = queryString.parse(window.location.search); // taking access_token from Url
+        console.log(parsed);
+        // let token = new URLSearchParams(window.location.search).get('access_token') // another way of taking access_token from Url without queryString plugin
         let accessToken = parsed.access_token;
+        console.log(accessToken);
 
-        //fetch('https://api.spotify.com/v1/me', {
-        //    headers: {'Authorization' : 'Bearer ' + accessToken}
-        //}).then(response => response.json())
-        //.then(data => this.setState({serverData: {user: {name: data.display_name}}}))
+        //const proxyUrl = 'https://cors-anywhere-mitya.herokuapp.com/' //proxy Url to fix CORS problem
+        const apiUrlMe = 'https://api.spotify.com/v1/me' //Spotify API User
+        const apiUrlPlaylists = 'https://api.spotify.com/v1/me/playlists' //Spotify API Url Playlists
 
-        fetch('https://api.spotify.com/v1/me/playlists', {
-            headers: {'Authorization' : 'Bearer ' + accessToken}
-        }).then(response => response.json())
+        if (!accessToken)
+            return
+
+        fetch(apiUrlMe, {
+            headers: {'Authorization': 'Bearer ' + accessToken}
+        })
+        .then(response => response.json())
         .then(data => this.setState({
-            playlists: data.items.map(item => ({
-                name: item.name,
-                songs: []
-            }))
+            user: {
+                name: data.display_name
+            }
+        }))
+
+        fetch(apiUrlPlaylists, {
+            headers: {'Authorization': 'Bearer ' + accessToken}
+        })
+        .then(response => response.json())
+        .then(data => this.setState({
+            playlists: data.items.map(item => {
+                console.log(item.images);
+
+                if(item.images.length > 0){
+                    return {
+
+                        imageUrl: item.images[0].url,
+                        name: item.name,
+                        songs: []
+                    }
+                }
+                else {
+                    return {
+                        name: item.name,
+                        songs: []
+                    }
+                }
+
+
+            })
         }))
     }
     render() {
-        let playlistsToRender = this.state.user && this.state.user.playlists ? this.state.user.playlists.filter(playlist =>
-            playlist.name.toLowerCase().includes(
-                this.state.filterString.toLowerCase()
-            )
-        ) : []
+        let playlistsToRender =
+            this.state.user &&
+            this.state.playlists
+                ? this.state.playlists.filter(playlist =>
+                playlist.name.toLowerCase().includes(
+                    this.state.filterString.toLowerCase())
+                )
+                : []
         return (
             <div className="App">
                 {this.state.user ?
@@ -172,11 +210,12 @@ class App extends Component {
                         </div>
                     </div>
                 :
-                    <button
-                        onClick={() => window.location = 'http://localhost:8888/login'}
-                        style={{display: 'block', padding: '20px', fontSize: '32px', fontWeight: 'bold', background: '#fff', letterSpacing: '-1px', color: '#111', border: '2px solid', margin: '0 auto'}}>
-                        Sign in with Spotify
-                    </button>
+                    <button onClick={() => {
+                            window.location = window.location.href.includes('localhost')
+                                ? 'http://localhost:8888/login'
+                                : 'https://better-playlists-mitya-backend.herokuapp.com/login'
+                        }}
+                    >Sign in with Spotify</button>
                 }
             </div>
         );
