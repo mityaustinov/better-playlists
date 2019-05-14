@@ -159,26 +159,48 @@ class App extends Component {
             headers: {'Authorization': 'Bearer ' + accessToken}
         })
         .then(response => response.json())
-        .then(data => this.setState({
-            playlists: data.items.map(item => {
-                console.log(item.images);
+        .then(playlistData => {
+            let playlists = playlistData.items
+            let trackDataPromises = playlists.map(playlist => {
+                let responsePromise = fetch(playlist.tracks.href, {
+                    headers: {'Authorization': 'Bearer ' + accessToken}
+                })
+                let trackDataPromise = responsePromise
+                    .then(response => response.json())
+                return trackDataPromise
+            })
+            let allTracksDataPromises =
+                Promise.all(trackDataPromises)
+            let playlistsPromise = allTracksDataPromises.then(trackDatas => {
+                trackDatas.forEach((trackData, i) =>{
+                    playlists[i].trackDatas = trackData.items
+                    .map(item => item.track)
+                    .map(trackData => ({
+                        name: trackData.name,
+                        duration: trackData.duration_ms / 1000
+                    }))
+                })
+                return playlists
+            })
+            return playlistsPromise
+        })
 
+        .then(playlists => this.setState({
+            playlists: playlists.map(item => {
+                // console.log(item.trackDatas)
                 if(item.images.length > 0){
                     return {
-
                         imageUrl: item.images[0].url,
                         name: item.name,
-                        songs: []
+                        songs: item.trackDatas.slice(0,5)
                     }
                 }
                 else {
                     return {
                         name: item.name,
-                        songs: []
+                        songs: item.trackDatas.slice(0,5)
                     }
                 }
-
-
             })
         }))
     }
