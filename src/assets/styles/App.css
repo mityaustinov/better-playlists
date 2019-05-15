@@ -1,0 +1,133 @@
+body {
+    background: #181818;
+    margin: 0;
+    padding: 20px;
+    font: normal normal 100% 'Helvetica', 'Arial', sans-serif;
+    color: #fff;
+}
+
+h1 {
+    font-size: 50px;
+    margin: 0 0 20px;
+}
+
+h2 {
+    font-size: 32px;
+    margin: 0 30px 40px 0;
+}
+
+h3 {
+    font-size: 26px;
+    margin: 0 0 10px;
+    text-align: left;
+    text-shadow: 1px 1px 0 #000;
+}
+
+ol {
+    padding: 5px 5px 5px 20px;
+    margin: 0;
+}
+
+li {
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 5px;
+}
+
+img {
+    width: 100%;
+    margin: 20px 0 20px;
+}
+
+input {
+    width: 50%;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+    border: 1px solid #333;
+}
+
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 20px;
+    font-size: 30px;
+    background: #84bd00;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+}
+
+.App {
+    min-width: 300px;
+    padding-bottom: 40px;
+}
+
+.filter {
+    margin-bottom: 30px;
+}
+
+.playlists {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.playlist-item {
+    flex-basis: 24%;
+    box-sizing: border-box;
+}
+
+h1, h2, h3, li, input, .playlist-item {
+    transition: all 0.25s ease-out;
+}
+
+@media only screen and (max-width: 1024px) {
+    h1 {
+        font-size: 40px;
+    }
+    h2 {
+        font-size: 28px;
+        margin-bottom: 30px;
+        margin-right: 20px;
+    }
+    h3 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+    .playlist-item {
+        flex-basis: 48%;
+        padding: 20px 0 10px;
+    }
+}
+
+@media only screen and (max-width: 736px) {
+    .playlist-item {
+        flex-basis: 48%;
+        padding: 20px 0;
+    }
+    h1 {
+        font-size: 30px;
+    }
+    h2 {
+        font-size: 18px;
+        margin-right: 10px;
+    }
+    h3 {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    input {
+        width: 100%;
+    }
+    li {
+        font-size: 14px;
+        line-height: 19px;
+        margin-bottom: 4px;
+    }
+    .filter {
+        margin-bottom: 10px;
+    }
+}
